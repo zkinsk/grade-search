@@ -12,3 +12,35 @@ export const buildGrades = (grades) => {
 
   return assignments;
 };
+
+const buildTableRows = (grades) => {
+  let result = '';
+  grades.forEach((grade) => {
+    result += /*html */ `
+      <tr class=${grade.submitted ? '' : 'not-submitted'}>
+        <td>${grade.studentName}</td>
+        <td>${grade.grade}</td>
+      </tr>
+    `;
+  });
+  return result;
+};
+
+export const buildAssignmentCards = (assignmentRoot, data) => {
+  data.forEach((item) => {
+    console.log(item);
+    const assignmentCard = /*html*/ `
+    <div class="table-card">
+      <h4>${item.assignmentTitle}</h4>
+      <table class="w-100">
+        <tr>
+          <th>Student</th>
+          <th>Grade</th>
+        </tr>
+        ${buildTableRows(item.grades)}
+      </table>
+    </div>
+    `;
+    assignmentRoot.append(assignmentCard);
+  });
+};

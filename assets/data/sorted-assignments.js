@@ -1,4 +1,4 @@
-export const assignments = [
+export const sortedAssignments = [
   {
     assignmentTitle: '0: Web Development Prework',
     sortOrder: 0,
