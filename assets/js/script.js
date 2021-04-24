@@ -1,4 +1,4 @@
-import { getToken } from './requests.js';
+import { getToken, getGrades } from './requests.js';
 import { getFormData, showForm, hideForm, showAlert, hideAlert } from './form.js';
 import { getLocalToken, updateUserObj } from './client-storage.js';
 
@@ -6,6 +6,7 @@ const loginForm = $('.login-form');
 const inputs = $('.login-form input');
 const loginFormContainer = $('.login-form-container');
 const alertElem = $('.alert-message');
+const getGradesBtn = $('.get-grades');
 
 let authToken;
 let courseId = 3020;
@@ -21,6 +22,7 @@ function handleSubmit(e) {
         hideForm(loginFormContainer);
         const { userId, authToken } = res.authenticationInfo;
         updateUserObj({ userId, authToken });
+        checkForToken();
         return;
       }
       showAlert(alertElem, 'Incorrect Credentials');
@@ -31,9 +33,16 @@ function handleSubmit(e) {
     });
 }
 
+function fetchGrades() {
+  getGrades(courseId, authToken).then((res) => {
+    console.log(res);
+  });
+}
+
 function eventListeners() {
   loginForm.on('submit', handleSubmit);
   inputs.focus(() => hideAlert(alertElem));
+  getGradesBtn.on('click', fetchGrades);
 }
 
 function checkForToken() {
