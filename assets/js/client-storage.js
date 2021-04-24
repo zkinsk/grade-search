@@ -3,9 +3,9 @@ export const getUserObj = () => {
 };
 
 export const getLocalToken = () => {
-  return getUserObj().token;
+  return getUserObj().authToken;
 };
 
-export const updateUserObj = (args) => {
-  sessionStorage.setItem('userObj', JSON.stringify({ ...getUserObj(), ...args }));
+export const updateUserObj = (argObj) => {
+  sessionStorage.setItem('userObj', JSON.stringify({ ...getUserObj(), ...argObj }));
 };

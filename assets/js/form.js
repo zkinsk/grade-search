@@ -15,6 +15,9 @@ export const getFormData = (tar) => {
 export const hideForm = (formContainer) => {
   formContainer.addClass('d-none');
 };
+export const showForm = (formContainer) => {
+  formContainer.removeClass('d-none');
+};
 
 export const hideAlert = (alertContainer) => {
   alertContainer.text('');
