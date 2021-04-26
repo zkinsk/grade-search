@@ -1,6 +1,6 @@
-import { getToken, getGrades } from './api-calls.js';
-import { getFormData, showForm, hideForm, showAlert, hideAlert } from './form.js';
-import { getLocalToken, updateUserObj } from './client-storage.js';
+import { getToken, getGrades, getMe } from './api-calls.js';
+import { getFormData, showForm, hideForm, showElement, hideElement, hideAfter } from './form.js';
+import { getLocalToken, updateUserObj, clearStorage } from './client-storage.js';
 import { buildAssignmentCards, buildGrades } from './assignments.js';
 
 import { grades } from '../../hide/grades';
@@ -54,19 +54,31 @@ function fetchGrades() {
   //   });
 }
 
+function getUserCourses() {
+  getMe(authToken)
+    .then((data) => {
+      console.log('Me Data ', data);
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+}
+
 function eventListeners() {
   loginForm.on('submit', handleSubmit);
-  inputs.focus(() => hideAlert(alertElem));
+  inputs.focus(() => hideAlert(alertDanger));
   getGradesBtn.on('click', fetchGrades);
 }
 
 function checkForToken() {
   const token = getLocalToken();
   if (!token) {
+    clearStorage();
     showForm(loginFormContainer);
     return;
   }
   authToken = token;
+  getUserCourses();
 }
 
 $('document').ready(() => {
