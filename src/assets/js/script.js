@@ -8,7 +8,8 @@ import { grades } from '../../hide/grades';
 const loginForm = $('.login-form');
 const inputs = $('.login-form input');
 const loginFormContainer = $('.login-form-container');
-const alertElem = $('.alert-message');
+const alertDanger = $('.alert-danger');
+const alertInfo = $('.alert-info');
 const getGradesBtn = $('.get-grades');
 const assignmentRoot = $('.assignment-cards');
 
@@ -22,6 +23,8 @@ function handleSubmit(e) {
     .then((res) => {
       console.log(res);
       if (res.success) {
+        showElement(alertInfo, 'Logged in!');
+        hideAfter(alertInfo, 2000);
         clearableInputs.forEach((input) => (input.value = ''));
         hideForm(loginFormContainer);
         const { userId, authToken } = res.authenticationInfo;
@@ -29,11 +32,11 @@ function handleSubmit(e) {
         checkForToken();
         return;
       }
-      showAlert(alertElem, 'Incorrect Credentials');
+      showAlert(alertDanger, 'Incorrect Credentials');
     })
     .catch((e) => {
       console.error(e);
-      showAlert(alertElem, e);
+      showAlert(alertDanger, e);
     });
 }
 

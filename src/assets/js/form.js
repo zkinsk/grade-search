@@ -19,12 +19,18 @@ export const showForm = (formContainer) => {
   formContainer.removeClass('d-none');
 };
 
-export const hideAlert = (alertContainer) => {
-  alertContainer.text('');
-  alertContainer.addClass('d-none');
+export const hideElement = (element) => {
+  element.text('');
+  element.addClass('d-none');
 };
 
-export const showAlert = (alertContainer, message) => {
-  alertContainer.text(message);
-  alertContainer.removeClass('d-none');
+export const showElement = (element, message) => {
+  element.text(message);
+  element.removeClass('d-none');
+};
+
+export const hideAfter = (elem, time = 1000) => {
+  setTimeout(() => {
+    hideElement(elem);
+  }, time);
 };
