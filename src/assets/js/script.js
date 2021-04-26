@@ -3,7 +3,7 @@ import { getFormData, showForm, hideForm, showAlert, hideAlert } from './form.js
 import { getLocalToken, updateUserObj } from './client-storage.js';
 import { buildAssignmentCards, buildGrades } from './assignments.js';
 
-import { grades } from '../../node_modules/grades.js';
+import { grades } from '../../hide/grades';
 
 const loginForm = $('.login-form');
 const inputs = $('.login-form input');

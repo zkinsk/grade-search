@@ -1,5 +1,5 @@
 import fs from 'fs';
-import grades from 'grades';
+import grades from './hide/grades.js';
 
 const sortedAssignments = JSON.parse(fs.readFileSync('./sorted-assignments.json', 'utf-8'));
 
