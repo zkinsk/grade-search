@@ -1,4 +1,4 @@
-import { getToken, getGrades } from './requests.js';
+import { getToken, getGrades } from './api-calls.js';
 import { getFormData, showForm, hideForm, showAlert, hideAlert } from './form.js';
 import { getLocalToken, updateUserObj } from './client-storage.js';
 import { buildAssignmentCards, buildGrades } from './assignments.js';
