@@ -1,8 +1,10 @@
+const rootUrl = `https://bootcampspot.com`;
+
 export const getToken = ({ email, password }) => {
   if (!email || !password) {
     throw new Error('Complete Login form');
   }
-  const url = 'https://bootcampspot.com/api/instructor/v1/login';
+  const url = rooUrl + '/api/instructor/v1/login';
   return $.ajax({
     contentType: 'application/json',
     dataType: 'json',
@@ -19,7 +21,7 @@ export const getGrades = (courseId, authToken) => {
   if (!courseId || !authToken) {
     throw new Error('missing course id or auth token');
   }
-  const url = 'https://bootcampspot.com/api/instructor/v1/grades';
+  const url = rootUrl + '/api/instructor/v1/grades';
   return $.ajax({
     url: url,
     type: 'POST',
@@ -29,5 +31,20 @@ export const getGrades = (courseId, authToken) => {
     },
     data: JSON.stringify({ courseId }),
     contentType: 'application/json',
+  });
+};
+
+export const getMe = (authToken) => {
+  if (!authToken) {
+    throw new Error('No Auth Token Provided');
+  }
+  const url = rootUrl + '/api/instructor/v1/me';
+  return $.ajax({
+    url: url,
+    type: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      authToken: authToken,
+    },
   });
 };
