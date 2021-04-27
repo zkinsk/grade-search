@@ -1,6 +1,6 @@
 import jquery from 'jquery';
 
-const $ = (window.$ = window.jQuery = jquery);
+// const $ = (window.$ = window.jQuery = jquery);
 
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.css'; // Import precompiled Bootstrap css
@@ -15,13 +15,23 @@ import { cohortButton } from '../components/cohort-button';
 
 import { grades } from '../../hide/grades';
 
-const loginForm = $('.login-form');
-const inputs = $('.login-form input');
-const loginFormContainer = $('.login-form-container');
-const getGradesBtn = $('.get-grades');
-const assignmentRootElem = $('.assignment-cards');
-const assignmentButtonContainer = $('.assignment-buttons');
-const logoutButtonElem = $('.logout-button');
+import {
+  loginForm,
+  inputs,
+  loginFormContainer,
+  getGradesBtn,
+  assignmentRootElem,
+  assignmentButtonContainer,
+  logoutButtonElem,
+} from './selectors';
+
+// const loginForm = $('.login-form');
+// const inputs = $('.login-form input');
+// const loginFormContainer = $('.login-form-container');
+// const getGradesBtn = $('.get-grades');
+// const assignmentRootElem = $('.assignment-cards');
+// const assignmentButtonContainer = $('.assignment-buttons');
+// const logoutButtonElem = $('.logout-button');
 
 import { Enrollment, AdaptedEnrollment } from './types/me-types';
 

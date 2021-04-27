@@ -1,7 +1,4 @@
-import jquery from 'jquery';
-const $ = (window.$ = window.jQuery = jquery);
-
-const logoutButtonElem = $('.logout-button');
+import { logoutButtonElem } from './selectors';
 
 export const getFormData = (tar) => {
   const formData = {};
