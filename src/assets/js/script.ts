@@ -15,7 +15,7 @@ const assignmentRootElem = $('.assignment-cards');
 const assignmentButtonContainer = $('.assignment-buttons');
 const logoutButtonElem = $('.logout-button');
 
-import { Enrollment } from './types/me-types';
+import { Enrollment, AdaptedEnrollment } from './types/me-types';
 
 let authToken: string | null;
 let courseId = 3020;
@@ -30,7 +30,7 @@ function handleSubmit(e: Event) {
         alertInfo('Logged In!', 2000);
         clearableInputs.forEach((input) => (input.value = ''));
         hideForm(loginFormContainer);
-        const { userId, authToken } = res.authenticationInfo;
+        const { userId, authToken } = res.authenticationInfo || {};
         updateUserObj({ userId, authToken });
         checkForToken();
         return;
@@ -39,7 +39,7 @@ function handleSubmit(e: Event) {
     })
     .catch((e: Error) => {
       console.error(e);
-      alertDanger(e, null);
+      alertDanger(e.message, null);
     });
 }
 
@@ -58,7 +58,7 @@ function fetchGrades() {
   //   });
 }
 
-function buildUserEnrolmentObject(enrollments: Enrollment[]) {
+function buildUserEnrolmentObject(enrollments: Enrollment[]): AdaptedEnrollment[] {
   // console.log('Me Data ', enrollments);
   const userEnrollments = enrollments.map((item) => ({
     id: item.id,
@@ -72,7 +72,7 @@ function buildUserEnrolmentObject(enrollments: Enrollment[]) {
   return userEnrollments;
 }
 
-function buildCohortButtons(enrollments: Enrollment[]) {
+function buildCohortButtons(enrollments: AdaptedEnrollment[]) {
   enrollments.forEach(({ id, cohortName }) => {
     assignmentButtonContainer.append(cohortButton({ id, cohortName }));
   });

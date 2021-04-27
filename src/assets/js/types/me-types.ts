@@ -25,6 +25,16 @@ export interface Enrollment extends PlusObj {
   courseRole: CourseRole;
 }
 
+export interface AdaptededEnrollment {
+  id: number;
+  courseId: number;
+  courseRole: string;
+  cohortName: string;
+  active: boolean;
+  startDate: string;
+  endDate: string;
+}
+
 interface MeInterface extends PlusObj {
   userInfo: UserInfo;
   Enrollments: Enrollment[];

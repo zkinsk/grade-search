@@ -1,19 +1,19 @@
 const alertDangerElem = $('.alert-danger');
 const alertInfoElem = $('.alert-info');
 
-type Alert = (message: string, time?: number) => void;
+type Alert = (message: string, time?: number | null) => void;
 
 const hideElement = (element: JQuery<HTMLElement>) => {
   element.text('');
   element.addClass('d-none');
 };
-const showElement = (element: JQuery<HTMLElement>, message: string, time?: number) => {
+const showElement = (element: JQuery<HTMLElement>, message: string, time?: number | null) => {
   element.text(message);
   element.removeClass('d-none');
   hideAfter(element, time);
 };
 
-const hideAfter = (elem: JQuery<HTMLElement>, time = 1000) => {
+const hideAfter = (elem: JQuery<HTMLElement>, time: null | number = 1000) => {
   if (time === null) return;
   setTimeout(() => {
     hideElement(elem);
