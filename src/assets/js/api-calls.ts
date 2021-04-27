@@ -28,6 +28,12 @@ export const getToken = ({ email, password }: LoginForm) => {
   if (!email || !password) {
     throw new Error('Complete Login form');
   }
+  if (password === 'error') {
+    console.log('error');
+    mockLogin.errorCode = 'Incorrect Credentials';
+    mockLogin.success = false;
+    mockLogin.authenticationInfo = null;
+  }
   return Promise.resolve(mockLogin);
   // const url = rootUrl + '/api/instructor/v1/login';
   // return $.ajax({
