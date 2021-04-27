@@ -1,3 +1,7 @@
+import 'bootstrap';
+import 'bootstrap/dist/css/bootstrap.css'; // Import precompiled Bootstrap css
+import '@fortawesome/fontawesome-free/css/all.css';
+
 import { getToken, getGrades, getMe, getCohortAssignments } from './api-calls';
 import { getFormData, showForm, hideForm, showLogoutButton, hideLogoutButton } from './form';
 import { getLocalToken, updateUserObj, clearStorage } from './client-storage';
