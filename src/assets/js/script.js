@@ -2,14 +2,13 @@ import { getToken, getGrades, getMe } from './api-calls.js';
 import { getFormData, showForm, hideForm, showElement, hideElement, hideAfter } from './form.js';
 import { getLocalToken, updateUserObj, clearStorage } from './client-storage.js';
 import { buildAssignmentCards, buildGrades } from './assignments.js';
+import { alertInfo, alertDanger, hideAlert } from './alert';
 
 import { grades } from '../../hide/grades';
 
 const loginForm = $('.login-form');
 const inputs = $('.login-form input');
 const loginFormContainer = $('.login-form-container');
-const alertDanger = $('.alert-danger');
-const alertInfo = $('.alert-info');
 const getGradesBtn = $('.get-grades');
 const assignmentRoot = $('.assignment-cards');
 
