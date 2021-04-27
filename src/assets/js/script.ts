@@ -42,6 +42,7 @@ function handleSubmit(e) {
 }
 
 function fetchGrades() {
+  assignmentRootElem.empty();
   const builtAssignments = buildGrades(grades);
   console.log(builtAssignments);
   buildAssignmentCards(assignmentRootElem, builtAssignments);

@@ -17,13 +17,16 @@ export const buildGrades = (grades) => {
 
 export const buildStudentAssignmentGrades = () => {};
 
-export const buildCurrentCalendarAssignmentList = () => {};
+export const buildCurrentCalendarAssignmentList = () => {
+  const now = new Date();
+};
 
 const buildTableRows = (grades) => {
   return grades.map((grade) => tableRow(grade)).join('');
 };
 
 export const buildAssignmentCards = (assignmentRoot, data) => {
+  assignmentRoot.empty();
   data.forEach(({ assignmentTitle: title, grades }) => {
     const card = assignmentCard({
       title: title,
