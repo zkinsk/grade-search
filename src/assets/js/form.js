@@ -1,3 +1,5 @@
+const logoutButtonElem = $('.logout-button');
+
 export const getFormData = (tar) => {
   const formData = {};
   const clearableInputs = [];
@@ -19,18 +21,9 @@ export const showForm = (formContainer) => {
   formContainer.removeClass('d-none');
 };
 
-export const hideElement = (element) => {
-  element.text('');
-  element.addClass('d-none');
+export const showLogoutButton = () => {
+  logoutButtonElem.removeClass('d-none');
 };
-
-export const showElement = (element, message) => {
-  element.text(message);
-  element.removeClass('d-none');
-};
-
-export const hideAfter = (elem, time = 1000) => {
-  setTimeout(() => {
-    hideElement(elem);
-  }, time);
+export const hideLogoutButton = () => {
+  logoutButtonElem.addClass('d-none');
 };

@@ -1,4 +1,6 @@
 import { sortedAssignments } from '../data/sorted-assignments.js';
+import { tableRow } from '../components/class-card-table-row.js';
+import { assignmentCard } from '../components/class-cards.js';
 
 export const buildGrades = (grades) => {
   const assignments = [...sortedAssignments];
@@ -13,34 +15,20 @@ export const buildGrades = (grades) => {
   return assignments;
 };
 
+export const buildStudentAssignmentGrades = () => {};
+
+export const buildCurrentCalendarAssignmentList = () => {};
+
 const buildTableRows = (grades) => {
-  let result = '';
-  grades.forEach((grade) => {
-    result += /*html */ `
-      <tr class=${grade.submitted ? '' : 'not-submitted'}>
-        <td>${grade.studentName}</td>
-        <td>${grade.grade}</td>
-      </tr>
-    `;
-  });
-  return result;
+  return grades.map((grade) => tableRow(grade)).join('');
 };
 
 export const buildAssignmentCards = (assignmentRoot, data) => {
-  data.forEach((item) => {
-    console.log(item);
-    const assignmentCard = /*html*/ `
-    <div class="table-card">
-      <h4>${item.assignmentTitle}</h4>
-      <table class="w-100">
-        <tr>
-          <th>Student</th>
-          <th>Grade</th>
-        </tr>
-        ${buildTableRows(item.grades)}
-      </table>
-    </div>
-    `;
-    assignmentRoot.append(assignmentCard);
+  data.forEach(({ assignmentTitle: title, grades }) => {
+    const card = assignmentCard({
+      title: title,
+      grades: buildTableRows(grades),
+    });
+    assignmentRoot.append(card);
   });
 };
