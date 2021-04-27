@@ -1,9 +1,18 @@
 import { me } from '../../hide/me';
 import { assignments } from '../../hide/assignments-res';
 
+import LoginRes, { LoginForm } from './types/login-types';
+import StudentAssignmentGrades from './types/grades';
+import Me from './types/me-types';
+import CohortAssignments from './types/calendar-assignments';
+
 const rootUrl = `https://bootcampspot.com`;
 
-const mockLogin = {
+type GetGrades = (arg1?: number, arg2?: string | null) => Promise<StudentAssignmentGrades>;
+type GetMe = (arg1?: string | null) => Promise<Me>;
+type GetCohortAssignments = (arg1?: number, arg2?: string | null) => Promise<CohortAssignments>;
+
+const mockLogin: LoginRes = {
   success: true,
   errorCode: null,
   resetToken: null,
@@ -15,12 +24,12 @@ const mockLogin = {
   },
 };
 
-export const getToken = ({ email, password }) => {
+export const getToken = ({ email, password }: LoginForm) => {
   if (!email || !password) {
     throw new Error('Complete Login form');
   }
   return Promise.resolve(mockLogin);
-  const url = rooUrl + '/api/instructor/v1/login';
+  const url = rootUrl + '/api/instructor/v1/login';
   return $.ajax({
     contentType: 'application/json',
     dataType: 'json',
@@ -33,53 +42,57 @@ export const getToken = ({ email, password }) => {
   });
 };
 
-export const getGrades = (courseId, authToken) => {
+export const getGrades: GetGrades = (courseId, authToken) => {
   if (!courseId || !authToken) {
     throw new Error('missing course id or auth token');
   }
   const url = rootUrl + '/api/instructor/v1/grades';
-  return $.ajax({
-    url: url,
-    type: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      authToken: authToken,
-    },
-    data: JSON.stringify({ courseId }),
-    contentType: 'application/json',
+  return new Promise((resolve, reject) => {
+    resolve(
+      $.ajax({
+        url: url,
+        type: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          authToken: authToken,
+        },
+        data: JSON.stringify({ courseId }),
+        contentType: 'application/json',
+      })
+    );
   });
 };
 
-export const getMe = (authToken) => {
+export const getMe: GetMe = (authToken) => {
   if (!authToken) {
     throw new Error('No Auth Token Provided');
   }
   return Promise.resolve(me);
-  const url = rootUrl + '/api/instructor/v1/me';
-  return $.ajax({
-    url: url,
-    type: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      authToken: authToken,
-    },
-  });
+  // const url = rootUrl + '/api/instructor/v1/me';
+  // return $.ajax({
+  //   url: url,
+  //   type: 'GET',
+  //   headers: {
+  //     'Content-Type': 'application/json',
+  //     authToken: authToken,
+  //   },
+  // });
 };
 
-export const getCohortAssignments = (enrollmentId, authToken) => {
+export const getCohortAssignments: GetCohortAssignments = (enrollmentId, authToken) => {
   if (!authToken) {
     throw new Error('No Auth Token Provided');
   }
   console.log('enrollment id: ', enrollmentId, ' & ', authToken);
   return Promise.resolve(assignments);
-  const url = rootUrl + '/api/instructor/v1/assignments';
-  return $.ajax({
-    url,
-    type: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      authToken: authToken,
-    },
-    data: JSON.stringify({ enrollmentId }),
-  });
+  // const url = rootUrl + '/api/instructor/v1/assignments';
+  // return $.ajax({
+  //   url,
+  //   type: 'POST',
+  //   headers: {
+  //     'Content-Type': 'application/json',
+  //     authToken: authToken,
+  //   },
+  //   data: JSON.stringify({ enrollmentId }),
+  // });
 };

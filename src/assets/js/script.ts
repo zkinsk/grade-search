@@ -1,7 +1,7 @@
-import { getToken, getGrades, getMe, getCohortAssignments } from './api-calls.js';
-import { getFormData, showForm, hideForm, showLogoutButton, hideLogoutButton } from './form.js';
-import { getLocalToken, updateUserObj, clearStorage } from './client-storage.js';
-import { buildAssignmentCards, buildGrades } from './assignments.js';
+import { getToken, getGrades, getMe, getCohortAssignments } from './api-calls';
+import { getFormData, showForm, hideForm, showLogoutButton, hideLogoutButton } from './form';
+import { getLocalToken, updateUserObj, clearStorage } from './client-storage';
+import { buildAssignmentCards, buildGrades } from './assignments';
 import { alertInfo, alertDanger, hideAlert } from './alert';
 import { cohortButton } from '../components/cohort-button';
 
@@ -15,10 +15,12 @@ const assignmentRootElem = $('.assignment-cards');
 const assignmentButtonContainer = $('.assignment-buttons');
 const logoutButtonElem = $('.logout-button');
 
-let authToken;
+import { Enrollment } from './types/me-types';
+
+let authToken: string | null;
 let courseId = 3020;
 
-function handleSubmit(e) {
+function handleSubmit(e: Event) {
   e.preventDefault();
   const { formData, clearableInputs } = getFormData(e.target);
   getToken(formData)
@@ -35,7 +37,7 @@ function handleSubmit(e) {
       }
       alertDanger('Incorrect Credentials', null);
     })
-    .catch((e) => {
+    .catch((e: Error) => {
       console.error(e);
       alertDanger(e, null);
     });
@@ -56,7 +58,7 @@ function fetchGrades() {
   //   });
 }
 
-function buildUserEnrolmentObject(enrollments) {
+function buildUserEnrolmentObject(enrollments: Enrollment[]) {
   // console.log('Me Data ', enrollments);
   const userEnrollments = enrollments.map((item) => ({
     id: item.id,
@@ -70,7 +72,7 @@ function buildUserEnrolmentObject(enrollments) {
   return userEnrollments;
 }
 
-function buildCohortButtons(enrollments) {
+function buildCohortButtons(enrollments: Enrollment[]) {
   enrollments.forEach(({ id, cohortName }) => {
     assignmentButtonContainer.append(cohortButton({ id, cohortName }));
   });
@@ -87,7 +89,7 @@ function getUserCourses() {
     });
 }
 
-function getCourseId() {
+function getCourseId(this: any) {
   const id = $(this).data('id');
   getCohortAssignments(id, authToken).then((res) => {
     console.log('res: ', res);
@@ -102,7 +104,7 @@ function logout() {
 
 function eventListeners() {
   loginForm.on('submit', handleSubmit);
-  inputs.focus(() => hide);
+  inputs.focus(() => hideAlert());
   getGradesBtn.on('click', fetchGrades);
   assignmentButtonContainer.on('click', 'button', getCourseId);
   logoutButtonElem.on('click', logout);

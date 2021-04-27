@@ -1,6 +1,6 @@
-import { sortedAssignments } from '../data/sorted-assignments.js';
-import { tableRow } from '../components/class-card-table-row.js';
-import { assignmentCard } from '../components/class-cards.js';
+import { sortedAssignments } from '../data/sorted-assignments';
+import { tableRow } from '../components/class-card-table-row';
+import { assignmentCard } from '../components/class-cards';
 
 export const buildGrades = (grades) => {
   const assignments = [...sortedAssignments];

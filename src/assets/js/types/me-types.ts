@@ -1,28 +1,31 @@
-export interface UserInfo {
+interface PlusObj {
+  [key: string]: any;
+}
+export interface UserInfo extends PlusObj {
   id: number;
   userName: string;
 }
 
-export interface Course {
+export interface Course extends PlusObj {
   id: number;
   name: string;
-  startDate: Date;
-  endDate: Date;
+  startDate: string;
+  endDate: string;
 }
 
-export interface CourseRole {
+export interface CourseRole extends PlusObj {
   courseRoleCode: string;
   name: string;
 }
 
-export interface Enrollment {
+export interface Enrollment extends PlusObj {
   id: number;
   courseId: number;
   course: Course;
-  courseRolee: CourseRole;
+  courseRole: CourseRole;
 }
 
-interface MeInterface {
+interface MeInterface extends PlusObj {
   userInfo: UserInfo;
   Enrollments: Enrollment[];
 }

@@ -1,15 +1,25 @@
+interface AnyObj {
+  [key: string]: any;
+}
 export interface Category {
   code: string;
   name: string;
 }
 
-interface CalendarAssignment {
+export interface CalendarAssignment extends AnyObj {
   id: number;
-  assignmentDate: Date;
-  dueDate: Date;
+  assignmentDate: string;
+  dueDate: string;
   title: string;
   required: boolean;
   category: Category;
 }
 
-export default CalendarAssignment;
+interface CohortAssignments extends AnyObj {
+  currentWeekAssignments: {
+    [key: string]: any;
+  };
+  calendarAssignments: CalendarAssignment[];
+}
+
+export default CohortAssignments;
