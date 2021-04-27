@@ -24,7 +24,9 @@ import { Enrollment, AdaptedEnrollment } from './types/me-types';
 let authToken: string | null;
 let courseId = 3020;
 
-function handleSubmit(e: Event) {
+console.log('running');
+
+function handleSubmit(e: JQuery.SubmitEvent) {
   e.preventDefault();
   const { formData, clearableInputs } = getFormData(e.target);
   getToken(formData)
@@ -93,7 +95,7 @@ function getUserCourses() {
     });
 }
 
-function getCourseId(this: any) {
+function getCourseId(this: JQuery.SubmitEvent) {
   const id = $(this).data('id');
   getCohortAssignments(id, authToken).then((res) => {
     console.log('res: ', res);
@@ -107,8 +109,8 @@ function logout() {
 }
 
 function eventListeners() {
-  loginForm.on('submit', handleSubmit);
-  inputs.focus(() => hideAlert());
+  loginForm.on('submit', (e: JQuery.SubmitEvent) => handleSubmit(e));
+  inputs.on('focus', () => hideAlert());
   getGradesBtn.on('click', fetchGrades);
   assignmentButtonContainer.on('click', 'button', getCourseId);
   logoutButtonElem.on('click', logout);

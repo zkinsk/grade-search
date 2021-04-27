@@ -1,4 +1,6 @@
-export const sortedAssignments = [
+import { SortedAssignment } from '../js/types/grades';
+
+export const sortedAssignments: SortedAssignment[] = [
   {
     assignmentTitle: '0: Web Development Prework',
     sortOrder: 0,
