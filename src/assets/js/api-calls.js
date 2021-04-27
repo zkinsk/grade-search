@@ -1,4 +1,5 @@
 import { me } from '../../hide/me';
+import { assignments } from '../../hide/assignments-res';
 
 const rootUrl = `https://bootcampspot.com`;
 
@@ -62,5 +63,23 @@ export const getMe = (authToken) => {
       'Content-Type': 'application/json',
       authToken: authToken,
     },
+  });
+};
+
+export const getCohortAssignments = (enrollmentId, authToken) => {
+  if (!authToken) {
+    throw new Error('No Auth Token Provided');
+  }
+  console.log('enrollment id: ', enrollmentId, ' & ', authToken);
+  return Promise.resolve(assignments);
+  const url = rootUrl + '/api/instructor/v1/assignments';
+  return $.ajax({
+    url,
+    type: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      authToken: authToken,
+    },
+    data: JSON.stringify({ enrollmentId }),
   });
 };
