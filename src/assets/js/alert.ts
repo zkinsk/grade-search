@@ -1,3 +1,5 @@
+const logoutButtonElem = $('.logout-button');
+
 const alertDangerElem = $('.alert-danger');
 const alertInfoElem = $('.alert-info');
 
