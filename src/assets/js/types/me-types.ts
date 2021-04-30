@@ -25,7 +25,7 @@ export interface Enrollment extends PlusObj {
   courseRole: CourseRole;
 }
 
-export interface AdaptededEnrollment {
+export interface AdaptedEnrollment {
   id: number;
   courseId: number;
   courseRole: string;

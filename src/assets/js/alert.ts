@@ -1,5 +1,12 @@
-const alertDangerElem = $('.alert-danger');
-const alertInfoElem = $('.alert-info');
+// import jquery from 'jquery';
+// const $ = (window.$ = window.jQuery = jquery);
+
+// const logoutButtonElem = $('.logout-button');
+
+// const alertDangerElem = $('.alert-danger');
+// const alertInfoElem = $('.alert-info');
+
+import { alertDangerElem, alertInfoElem, logoutButtonElem } from './selectors';
 
 type Alert = (message: string, time?: number | null) => void;
 

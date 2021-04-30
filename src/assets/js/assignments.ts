@@ -2,16 +2,18 @@ import { sortedAssignments } from '../data/sorted-assignments';
 import { tableRow } from '../components/class-card-table-row';
 import { assignmentCard } from '../components/class-cards';
 
-export const buildGrades = (grades) => {
-  const assignments = [...sortedAssignments];
+import Grades, { SortedAssignment, AdaptedGrades } from './types/grades';
+import StudentAssignmentGrade from './types/grades';
+
+export const buildGrades = (grades: Grades[]) => {
+  const assignments = sortedAssignments.map((item) => ({ ...item }));
   grades.forEach((item) => {
     const index = assignments.findIndex((asmt) => asmt.assignmentTitle === item.assignmentTitle);
     if (index === -1) return;
     const { studentName, submitted, grade } = item;
-    assignments[index].grades = assignments[index].grades ? assignments[index].grades : [];
-    assignments[index].grades.push({ studentName, submitted, grade });
+    // assignments[index].grades = assignments[index].grades ? assignments[index].grades : [];
+    assignments[index].grades = [...assignments[index].grades, { studentName, submitted, grade }];
   });
-
   return assignments;
 };
 
@@ -21,13 +23,13 @@ export const buildCurrentCalendarAssignmentList = () => {
   const now = new Date();
 };
 
-const buildTableRows = (grades) => {
+const buildTableRows = (grades: AdaptedGrades[]) => {
   return grades.map((grade) => tableRow(grade)).join('');
 };
 
-export const buildAssignmentCards = (assignmentRoot, data) => {
-  assignmentRoot.empty();
+export const buildAssignmentCards = (assignmentRoot: JQuery, data: SortedAssignment[]) => {
   data.forEach(({ assignmentTitle: title, grades }) => {
+    // console.log('Grades: ', grades);
     const card = assignmentCard({
       title: title,
       grades: buildTableRows(grades),

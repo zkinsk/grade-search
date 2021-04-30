@@ -1,3 +1,11 @@
+import jquery from 'jquery';
+
+// const $ = (window.$ = window.jQuery = jquery);
+
+import 'bootstrap';
+import 'bootstrap/dist/css/bootstrap.css'; // Import precompiled Bootstrap css
+import '@fortawesome/fontawesome-free/css/all.css';
+
 import { getToken, getGrades, getMe, getCohortAssignments } from './api-calls';
 import { getFormData, showForm, hideForm, showLogoutButton, hideLogoutButton } from './form';
 import { getLocalToken, updateUserObj, clearStorage } from './client-storage';
@@ -7,20 +15,24 @@ import { cohortButton } from '../components/cohort-button';
 
 import { grades } from '../../hide/grades';
 
-const loginForm = $('.login-form');
-const inputs = $('.login-form input');
-const loginFormContainer = $('.login-form-container');
-const getGradesBtn = $('.get-grades');
-const assignmentRootElem = $('.assignment-cards');
-const assignmentButtonContainer = $('.assignment-buttons');
-const logoutButtonElem = $('.logout-button');
+import {
+  loginForm,
+  inputs,
+  loginFormContainer,
+  getGradesBtn,
+  assignmentRootElem,
+  assignmentButtonContainer,
+  logoutButtonElem,
+} from './selectors';
 
 import { Enrollment, AdaptedEnrollment } from './types/me-types';
 
 let authToken: string | null;
 let courseId = 3020;
 
-function handleSubmit(e: Event) {
+console.log('running');
+
+function handleSubmit(e: JQuery.SubmitEvent) {
   e.preventDefault();
   const { formData, clearableInputs } = getFormData(e.target);
   getToken(formData)
@@ -89,7 +101,7 @@ function getUserCourses() {
     });
 }
 
-function getCourseId(this: any) {
+function getCourseId(this: JQuery.SubmitEvent) {
   const id = $(this).data('id');
   getCohortAssignments(id, authToken).then((res) => {
     console.log('res: ', res);
@@ -103,8 +115,8 @@ function logout() {
 }
 
 function eventListeners() {
-  loginForm.on('submit', handleSubmit);
-  inputs.focus(() => hideAlert());
+  loginForm.on('submit', (e: JQuery.SubmitEvent) => handleSubmit(e));
+  inputs.on('focus', () => hideAlert());
   getGradesBtn.on('click', fetchGrades);
   assignmentButtonContainer.on('click', 'button', getCourseId);
   logoutButtonElem.on('click', logout);
