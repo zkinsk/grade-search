@@ -6,15 +6,14 @@ import Grades, { SortedAssignment, AdaptedGrades } from './types/grades';
 import StudentAssignmentGrade from './types/grades';
 
 export const buildGrades = (grades: Grades[]) => {
-  const assignments = [...sortedAssignments];
+  const assignments = sortedAssignments.map((item) => ({ ...item }));
   grades.forEach((item) => {
     const index = assignments.findIndex((asmt) => asmt.assignmentTitle === item.assignmentTitle);
     if (index === -1) return;
     const { studentName, submitted, grade } = item;
-    assignments[index].grades = assignments[index].grades ? assignments[index].grades : [];
-    assignments[index].grades.push({ studentName, submitted, grade });
+    // assignments[index].grades = assignments[index].grades ? assignments[index].grades : [];
+    assignments[index].grades = [...assignments[index].grades, { studentName, submitted, grade }];
   });
-
   return assignments;
 };
 
@@ -29,8 +28,8 @@ const buildTableRows = (grades: AdaptedGrades[]) => {
 };
 
 export const buildAssignmentCards = (assignmentRoot: JQuery, data: SortedAssignment[]) => {
-  assignmentRoot.empty();
   data.forEach(({ assignmentTitle: title, grades }) => {
+    // console.log('Grades: ', grades);
     const card = assignmentCard({
       title: title,
       grades: buildTableRows(grades),
