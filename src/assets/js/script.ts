@@ -25,14 +25,6 @@ import {
   logoutButtonElem,
 } from './selectors';
 
-// const loginForm = $('.login-form');
-// const inputs = $('.login-form input');
-// const loginFormContainer = $('.login-form-container');
-// const getGradesBtn = $('.get-grades');
-// const assignmentRootElem = $('.assignment-cards');
-// const assignmentButtonContainer = $('.assignment-buttons');
-// const logoutButtonElem = $('.logout-button');
-
 import { Enrollment, AdaptedEnrollment } from './types/me-types';
 
 let authToken: string | null;
