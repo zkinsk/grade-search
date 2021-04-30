@@ -1,3 +1,29 @@
 {
-  "type": "module"
+  "type": "module",
+  "name": "student-grades",
+  "version": "1.0.0",
+  "main": "./src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "parcel ./src/index.html",
+    "build": "parcel ./src/index.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zkinsk/grade-search.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zkinsk/grade-search/issues"
+  },
+  "homepage": "https://github.com/zkinsk/grade-search#readme",
+  "description": "",
+  "dependencies": {
+    "parcel-bundler": "^1.12.5"
+  },
+  "devDependencies": {
+    "@types/jquery": "^3.5.5",
+    "typescript": "^4.2.4"
+  }
 }

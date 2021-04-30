@@ -9,3 +9,7 @@ export const getLocalToken = () => {
 export const updateUserObj = (argObj) => {
   sessionStorage.setItem('userObj', JSON.stringify({ ...getUserObj(), ...argObj }));
 };
+
+export const clearStorage = () => {
+  sessionStorage.clear();
+};
