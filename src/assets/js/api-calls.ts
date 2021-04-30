@@ -12,19 +12,19 @@ type GetGrades = (arg1?: number, arg2?: string | null) => Promise<StudentAssignm
 type GetMe = (arg1?: string | null) => Promise<Me>;
 type GetCohortAssignments = (arg1?: number, arg2?: string | null) => Promise<CohortAssignments>;
 
-const mockLogin: LoginRes = {
-  success: true,
-  errorCode: null,
-  resetToken: null,
-  authenticationInfo: {
-    userId: 13786,
-    firstLogin: false,
-    active: true,
-    authToken: 'fake-token',
-  },
-};
-
 export const getToken = ({ email, password }: LoginForm) => {
+  const mockLogin: LoginRes = {
+    success: true,
+    errorCode: null,
+    resetToken: null,
+    authenticationInfo: {
+      userId: 13786,
+      firstLogin: false,
+      active: true,
+      authToken: 'fake-token',
+    },
+  };
+  console.log(email, password);
   if (!email || !password) {
     throw new Error('Complete Login form');
   }
