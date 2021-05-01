@@ -9,7 +9,13 @@ import '@fortawesome/fontawesome-free/css/all.css';
 import { getToken, getGrades, getMe, getCohortAssignments } from './api-calls';
 import { getFormData, showForm, hideForm, showLogoutButton, hideLogoutButton } from './form';
 import { getLocalToken, updateUserObj, clearStorage } from './client-storage';
-import { buildAssignmentCards, buildGrades } from './assignments';
+import {
+  buildAssignmentCards,
+  buildGrades,
+  reduceCohortAssignments,
+  buildCurrentCalendarAssignmentList,
+  buildStudentAssignmentGrades,
+} from './assignments';
 import { alertInfo, alertDanger, hideAlert } from './alert';
 import { cohortButton } from '../components/cohort-button';
 
@@ -58,7 +64,6 @@ function handleSubmit(e: JQuery.SubmitEvent) {
 function fetchGrades() {
   assignmentRootElem.empty();
   const builtAssignments = buildGrades(grades);
-  console.log(builtAssignments);
   buildAssignmentCards(assignmentRootElem, builtAssignments);
   // getGrades(courseId, authToken)
   //   .then((res) => {
@@ -70,7 +75,7 @@ function fetchGrades() {
   //   });
 }
 
-function buildUserEnrolmentObject(enrollments: Enrollment[]): AdaptedEnrollment[] {
+function buildUserEnrollmentObject(enrollments: Enrollment[]): AdaptedEnrollment[] {
   // console.log('Me Data ', enrollments);
   const userEnrollments = enrollments.map((item) => ({
     id: item.id,
@@ -93,7 +98,7 @@ function buildCohortButtons(enrollments: AdaptedEnrollment[]) {
 function getUserCourses() {
   getMe(authToken)
     .then(({ Enrollments }) => {
-      const userEnrollments = buildUserEnrolmentObject(Enrollments);
+      const userEnrollments = buildUserEnrollmentObject(Enrollments);
       buildCohortButtons(userEnrollments);
     })
     .catch((err) => {
@@ -101,12 +106,17 @@ function getUserCourses() {
     });
 }
 
-function getCourseId(this: JQuery.SubmitEvent) {
+function handleCourseClick(this: JQuery.SubmitEvent) {
   const id = $(this).data('id');
   getCohortAssignments(id, authToken).then((res) => {
-    console.log('res: ', res);
+    console.log('click');
+    const currentAssignments = buildCurrentCalendarAssignmentList(res);
+    const mappedAssignments = reduceCohortAssignments(res);
+    console.log('res: ', currentAssignments);
+    console.log('reduced: ', mappedAssignments.entries());
+    const studentAssignments = buildStudentAssignmentGrades(grades, mappedAssignments);
+    console.log('students Reduced: ', studentAssignments);
   });
-  // console.log(id);
 }
 
 function logout() {
@@ -118,7 +128,7 @@ function eventListeners() {
   loginForm.on('submit', (e: JQuery.SubmitEvent) => handleSubmit(e));
   inputs.on('focus', () => hideAlert());
   getGradesBtn.on('click', fetchGrades);
-  assignmentButtonContainer.on('click', 'button', getCourseId);
+  assignmentButtonContainer.on('click', 'button', handleCourseClick);
   logoutButtonElem.on('click', logout);
 }
 
