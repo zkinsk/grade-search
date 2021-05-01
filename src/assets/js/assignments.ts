@@ -10,7 +10,7 @@ import CohortAssignments, { MappedAssignments } from './types/calendar-assignmen
 export const buildGrades = (grades: Grades[]) => {
   const assignments = sortedAssignments.map((item) => ({ ...item }));
   grades.forEach((item) => {
-    const index = assignments.findIndex((asmt) => asmt.assignmentTitle === item.assignmentTitle);
+    const index = assignments.findIndex((assignment) => assignment.assignmentTitle === item.assignmentTitle);
     if (index === -1) return;
     const { studentName, submitted, grade } = item;
     assignments[index].grades = [...assignments[index].grades, { studentName, submitted, grade }];
@@ -29,7 +29,7 @@ export const buildStudentAssignmentGrades = (data: StudentAssignmentGrade[], cur
     studentMap.set(studentName, [...assignments, { ...rest, assignmentDate, dueDate }]);
   });
 
-  for (let [key, value] of studentMap) {
+  for (let [_key, value] of studentMap) {
     value.sort((a, b) => a.assignmentDate.valueOf() - b.assignmentDate.valueOf());
   }
   console.log('Student Map: ', studentMap);
@@ -59,7 +59,7 @@ export const buildAssignmentCards = (assignmentRoot: JQuery, data: SortedAssignm
   });
 };
 
-export const reduceCohortAssignments = (data: CohortAssignments) => {
+export const reduceCohortAssignments = (data: CohortAssignments): MappedAssignments => {
   const now = new Date();
   const output = new Map();
 
@@ -75,6 +75,5 @@ export const reduceCohortAssignments = (data: CohortAssignments) => {
     });
   });
 
-  console.log('Ouptut1: ', output);
   return output;
 };
