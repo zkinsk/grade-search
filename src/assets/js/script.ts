@@ -36,8 +36,6 @@ import { Enrollment, AdaptedEnrollment } from './types/me-types';
 let authToken: string | null;
 let courseId = 3020;
 
-console.log('running');
-
 function handleSubmit(e: JQuery.SubmitEvent) {
   e.preventDefault();
   const { formData, clearableInputs } = getFormData(e.target);
@@ -90,8 +88,8 @@ function buildUserEnrollmentObject(enrollments: Enrollment[]): AdaptedEnrollment
 }
 
 function buildCohortButtons(enrollments: AdaptedEnrollment[]) {
-  enrollments.forEach(({ id, cohortName }) => {
-    assignmentButtonContainer.append(cohortButton({ id, cohortName }));
+  enrollments.forEach(({ id, cohortName, courseId }) => {
+    assignmentButtonContainer.append(cohortButton({ id, cohortName, courseId }));
   });
 }
 
@@ -107,16 +105,19 @@ function getUserCourses() {
 }
 
 function handleCourseClick(this: JQuery.SubmitEvent) {
-  const id = $(this).data('id');
-  getCohortAssignments(id, authToken).then((res) => {
-    console.log('click');
-    const currentAssignments = buildCurrentCalendarAssignmentList(res);
-    const mappedAssignments = reduceCohortAssignments(res);
-    console.log('res: ', currentAssignments);
-    console.log('reduced: ', mappedAssignments.entries());
-    const studentAssignments = buildStudentAssignmentGrades(grades, mappedAssignments);
-    console.log('students Reduced: ', studentAssignments);
-  });
+  const id = parseInt($(this).data('id'));
+  const courseId = parseInt($(this).data('course-id'));
+  Promise.all([getCohortAssignments(id, authToken), getGrades(courseId, authToken)])
+    .then((res) => {
+      console.log(res);
+    })
+    .catch((e) => {
+      console.error(e);
+    });
+  // getCohortAssignments(id, authToken).then((res) => {
+  //   const mappedAssignments = reduceCohortAssignments(res);
+  //   const studentAssignments = buildStudentAssignmentGrades(grades, mappedAssignments);
+  // });
 }
 
 function logout() {
