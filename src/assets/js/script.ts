@@ -18,6 +18,7 @@ import {
 } from './assignments';
 import { alertInfo, alertDanger, hideAlert } from './alert';
 import { cohortButton } from '../components/cohort-button';
+import { classTable } from '../components/class-table';
 
 import { grades } from '../../hide/grades';
 
@@ -32,9 +33,10 @@ import {
 } from './selectors';
 
 import { Enrollment, AdaptedEnrollment } from './types/me-types';
+import { MappedAssignments } from './types/calendar-assignments';
+import { MappedStudentsWithAssignments } from './types/grades';
 
 let authToken: string | null;
-let courseId = 3020;
 
 function handleSubmit(e: JQuery.SubmitEvent) {
   e.preventDefault();
@@ -104,20 +106,26 @@ function getUserCourses() {
     });
 }
 
+function buildClassTable(mappedAssignments: MappedAssignments, mappedStudents: MappedStudentsWithAssignments) {
+  const table = classTable({ assignments: mappedAssignments, students: mappedStudents });
+  assignmentRootElem.html(table);
+
+  console.log(table);
+}
+
 function handleCourseClick(this: JQuery.SubmitEvent) {
   const id = parseInt($(this).data('id'));
   const courseId = parseInt($(this).data('course-id'));
   Promise.all([getCohortAssignments(id, authToken), getGrades(courseId, authToken)])
-    .then((res) => {
-      console.log(res);
+    .then(([rawCohortAssignments, rawStudentGrades]) => {
+      const mappedAssignments = reduceCohortAssignments(rawCohortAssignments);
+      const mappedStudentGrades = buildStudentAssignmentGrades(rawStudentGrades, mappedAssignments);
+      buildClassTable(mappedAssignments, mappedStudentGrades);
+      console.log(mappedStudentGrades, mappedAssignments);
     })
     .catch((e) => {
       console.error(e);
     });
-  // getCohortAssignments(id, authToken).then((res) => {
-  //   const mappedAssignments = reduceCohortAssignments(res);
-  //   const studentAssignments = buildStudentAssignmentGrades(grades, mappedAssignments);
-  // });
 }
 
 function logout() {

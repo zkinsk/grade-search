@@ -1,5 +1,6 @@
 import { me } from '../../hide/me';
 import { assignments } from '../../hide/assignments-res';
+import { grades } from '../../hide/grades';
 
 import LoginRes, { LoginForm } from './types/login-types';
 import StudentAssignmentGrades from './types/grades';
@@ -8,7 +9,7 @@ import CohortAssignments from './types/calendar-assignments';
 
 const rootUrl = `https://bootcampspot.com`;
 
-type GetGrades = (arg1?: number, arg2?: string | null) => Promise<StudentAssignmentGrades>;
+type GetGrades = (arg1?: number, arg2?: string | null) => Promise<StudentAssignmentGrades[]>;
 type GetMe = (arg1?: string | null) => Promise<Me>;
 type GetCohortAssignments = (arg1?: number, arg2?: string | null) => Promise<CohortAssignments>;
 
@@ -52,21 +53,22 @@ export const getGrades: GetGrades = (courseId, authToken) => {
   if (!courseId || !authToken) {
     throw new Error('missing course id or auth token');
   }
-  const url = rootUrl + '/api/instructor/v1/grades';
-  return new Promise((resolve, reject) => {
-    resolve(
-      $.ajax({
-        url: url,
-        type: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          authToken: authToken,
-        },
-        data: JSON.stringify({ courseId }),
-        contentType: 'application/json',
-      })
-    );
-  });
+  return Promise.resolve(grades);
+  // const url = rootUrl + '/api/instructor/v1/grades';
+  // return new Promise((resolve, reject) => {
+  //   resolve(
+  //     $.ajax({
+  //       url: url,
+  //       type: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         authToken: authToken,
+  //       },
+  //       data: JSON.stringify({ courseId }),
+  //       contentType: 'application/json',
+  //     })
+  //   );
+  // });
 };
 
 export const getMe: GetMe = (authToken) => {
