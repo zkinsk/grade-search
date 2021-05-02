@@ -30,16 +30,18 @@ export const classTable = ({
   students: MappedStudentsWithAssignments;
 }) => {
   return /*html*/ `
-  <table class="table table-striped table-bordered grade-table">
-    <thead class="grade-table-header thead-light">
-      <tr>
-        <th scope="col">Student</th>
-        ${assignmentTitles(assignments)}
-      </tr>
-    </thead>
-    <tbody class="grade-table-body">
-      ${studentGrades(students)}
-    </tbody>
+  <div class="table-responsive">
+  <table class="table table-striped table-bordered grade-table table-sm">
+  <thead class="grade-table-header thead-light">
+  <tr>
+  <th scope="col">Student</th>
+  ${assignmentTitles(assignments)}
+  </tr>
+  </thead>
+  <tbody class="grade-table-body">
+  ${studentGrades(students)}
+  </tbody>
   </table>
+  </div>
   `;
 };
