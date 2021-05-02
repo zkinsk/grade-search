@@ -19,14 +19,19 @@ td {
   background-color: rgba(255, 0, 0, 0.149);
 }
 
-/* .table-header {
-  border: none !important;
-} */
+.grade-table {
+  border: none;
+}
 
-.grade-table th {
+.grade-table-header {
+  background: white;
+  border: none;
+}
+
+.grade-table-header th {
+  border: none;
   position: sticky;
   top: 0;
-  background: white;
 }
 
 .table-header-rotate {
@@ -36,11 +41,14 @@ td {
 }
 
 .table-header-rotate > div {
-  transform: translate(1px, 125px) rotate(270deg);
+  transform: rotate(300deg);
+  /* transform: translate(1px, 125px); */
   width: 2.5rem;
 }
 
 .table-header-rotate > div > span {
   /* border-bottom: 1px solid #ccc; */
+  background: white;
   padding: 5px 10px;
+  z-index: 100;
 }

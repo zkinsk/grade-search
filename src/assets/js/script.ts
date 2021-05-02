@@ -1,32 +1,19 @@
-import jquery from 'jquery';
-
-// const $ = (window.$ = window.jQuery = jquery);
-
 import 'bootstrap';
-import 'bootstrap/dist/css/bootstrap.css'; // Import precompiled Bootstrap css
+import 'bootstrap/dist/css/bootstrap.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
 import { getToken, getGrades, getMe, getCohortAssignments } from './api-calls';
 import { getFormData, showForm, hideForm, showLogoutButton, hideLogoutButton } from './form';
 import { getLocalToken, updateUserObj, clearStorage } from './client-storage';
-import {
-  buildAssignmentCards,
-  buildGrades,
-  reduceCohortAssignments,
-  buildCurrentCalendarAssignmentList,
-  buildStudentAssignmentGrades,
-} from './assignments';
+import { reduceCohortAssignments, buildStudentAssignmentGrades } from './assignments';
 import { alertInfo, alertDanger, hideAlert } from './alert';
 import { cohortButton } from '../components/cohort-button';
 import { classTable } from '../components/class-table';
-
-import { grades } from '../../hide/grades';
 
 import {
   loginForm,
   inputs,
   loginFormContainer,
-  getGradesBtn,
   assignmentRootElem,
   assignmentButtonContainer,
   logoutButtonElem,
@@ -35,8 +22,17 @@ import {
 import { Enrollment, AdaptedEnrollment } from './types/me-types';
 import { MappedAssignments } from './types/calendar-assignments';
 import { MappedStudentsWithAssignments } from './types/grades';
+import LoginResponse from './types/login-types';
 
 let authToken: string | null;
+
+function handleLogin(res: LoginResponse) {
+  alertInfo('Logged In!', 2000);
+  hideForm(loginFormContainer);
+  const { userId, authToken } = res.authenticationInfo || {};
+  updateUserObj({ userId, authToken });
+  checkForToken();
+}
 
 function handleSubmit(e: JQuery.SubmitEvent) {
   e.preventDefault();
@@ -45,12 +41,8 @@ function handleSubmit(e: JQuery.SubmitEvent) {
     .then((res) => {
       console.log(res);
       if (res.success) {
-        alertInfo('Logged In!', 2000);
         clearableInputs.forEach((input) => (input.value = ''));
-        hideForm(loginFormContainer);
-        const { userId, authToken } = res.authenticationInfo || {};
-        updateUserObj({ userId, authToken });
-        checkForToken();
+        handleLogin(res);
         return;
       }
       alertDanger('Incorrect Credentials', null);
@@ -61,22 +53,7 @@ function handleSubmit(e: JQuery.SubmitEvent) {
     });
 }
 
-function fetchGrades() {
-  assignmentRootElem.empty();
-  const builtAssignments = buildGrades(grades);
-  buildAssignmentCards(assignmentRootElem, builtAssignments);
-  // getGrades(courseId, authToken)
-  //   .then((res) => {
-  //     console.log(res);
-  //   })
-  //   .catch((e) => {
-  //     console.error(e);
-  //     showAlert(alertElem, e);
-  //   });
-}
-
 function buildUserEnrollmentObject(enrollments: Enrollment[]): AdaptedEnrollment[] {
-  // console.log('Me Data ', enrollments);
   const userEnrollments = enrollments.map((item) => ({
     id: item.id,
     courseId: item.courseId,
@@ -109,11 +86,13 @@ function getUserCourses() {
 function buildClassTable(mappedAssignments: MappedAssignments, mappedStudents: MappedStudentsWithAssignments) {
   const table = classTable({ assignments: mappedAssignments, students: mappedStudents });
   assignmentRootElem.html(table);
-
-  console.log(table);
 }
 
 function handleCourseClick(this: JQuery.SubmitEvent) {
+  assignmentButtonContainer.find('button').each(function () {
+    $(this).removeClass('active');
+  });
+  $(this).addClass('active');
   const id = parseInt($(this).data('id'));
   const courseId = parseInt($(this).data('course-id'));
   Promise.all([getCohortAssignments(id, authToken), getGrades(courseId, authToken)])
@@ -131,12 +110,13 @@ function handleCourseClick(this: JQuery.SubmitEvent) {
 function logout() {
   clearStorage();
   checkForToken();
+  assignmentButtonContainer.empty();
+  assignmentRootElem.empty();
 }
 
 function eventListeners() {
   loginForm.on('submit', (e: JQuery.SubmitEvent) => handleSubmit(e));
   inputs.on('focus', () => hideAlert());
-  getGradesBtn.on('click', fetchGrades);
   assignmentButtonContainer.on('click', 'button', handleCourseClick);
   logoutButtonElem.on('click', logout);
 }

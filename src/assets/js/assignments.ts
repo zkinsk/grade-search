@@ -5,7 +5,6 @@ import { assignmentCard } from '../components/class-cards';
 import Grades, { SortedAssignment, AdaptedGrades, MappedStudentsWithAssignments } from './types/grades';
 import StudentAssignmentGrade from './types/grades';
 import CohortAssignments, { MappedAssignments } from './types/calendar-assignments';
-// import { assignments } from '../../hide/assignments-res';
 
 export const buildGrades = (grades: Grades[]) => {
   const assignments = sortedAssignments.map((item) => ({ ...item }));
@@ -18,15 +17,21 @@ export const buildGrades = (grades: Grades[]) => {
   return assignments;
 };
 
+const ntiOrNotGraded = (submitted: boolean) => {
+  return submitted ? 'NG' : 'NTI';
+};
+
 export const buildStudentAssignmentGrades = (data: StudentAssignmentGrade[], currentAssignments: MappedAssignments) => {
   const studentMap: MappedStudentsWithAssignments = new Map();
   data.forEach((item) => {
     const assignment = currentAssignments.get(item.assignmentTitle);
     if (!assignment) return;
-    const { studentName, ...rest } = item;
+    const { studentName, grade, submitted, ...rest } = item;
     const { assignmentDate, dueDate } = assignment;
     const assignments = studentMap.get(studentName) || [];
-    studentMap.set(studentName, [...assignments, { ...rest, assignmentDate, dueDate }]);
+    console.log(grade);
+    const mappedGrade = grade ?? ntiOrNotGraded(submitted);
+    studentMap.set(studentName, [...assignments, { ...rest, grade: mappedGrade, submitted, assignmentDate, dueDate }]);
   });
 
   for (let [_key, value] of studentMap) {
