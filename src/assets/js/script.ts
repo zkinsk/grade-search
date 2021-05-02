@@ -1,36 +1,38 @@
-import jquery from 'jquery';
-
-// const $ = (window.$ = window.jQuery = jquery);
-
 import 'bootstrap';
-import 'bootstrap/dist/css/bootstrap.css'; // Import precompiled Bootstrap css
+import 'bootstrap/dist/css/bootstrap.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
 import { getToken, getGrades, getMe, getCohortAssignments } from './api-calls';
 import { getFormData, showForm, hideForm, showLogoutButton, hideLogoutButton } from './form';
 import { getLocalToken, updateUserObj, clearStorage } from './client-storage';
-import { buildAssignmentCards, buildGrades } from './assignments';
+import { reduceCohortAssignments, buildStudentAssignmentGrades } from './assignments';
 import { alertInfo, alertDanger, hideAlert } from './alert';
 import { cohortButton } from '../components/cohort-button';
-
-import { grades } from '../../hide/grades';
+import { classTable } from '../components/class-table';
 
 import {
   loginForm,
   inputs,
   loginFormContainer,
-  getGradesBtn,
   assignmentRootElem,
   assignmentButtonContainer,
   logoutButtonElem,
 } from './selectors';
 
 import { Enrollment, AdaptedEnrollment } from './types/me-types';
+import { MappedAssignments } from './types/calendar-assignments';
+import { MappedStudentsWithAssignments } from './types/grades';
+import LoginResponse from './types/login-types';
 
 let authToken: string | null;
-let courseId = 3020;
 
-console.log('running');
+function handleLogin(res: LoginResponse) {
+  alertInfo('Logged In!', 2000);
+  hideForm(loginFormContainer);
+  const { userId, authToken } = res.authenticationInfo || {};
+  updateUserObj({ userId, authToken });
+  checkForToken();
+}
 
 function handleSubmit(e: JQuery.SubmitEvent) {
   e.preventDefault();
@@ -39,12 +41,8 @@ function handleSubmit(e: JQuery.SubmitEvent) {
     .then((res) => {
       console.log(res);
       if (res.success) {
-        alertInfo('Logged In!', 2000);
         clearableInputs.forEach((input) => (input.value = ''));
-        hideForm(loginFormContainer);
-        const { userId, authToken } = res.authenticationInfo || {};
-        updateUserObj({ userId, authToken });
-        checkForToken();
+        handleLogin(res);
         return;
       }
       alertDanger('Incorrect Credentials', null);
@@ -55,23 +53,7 @@ function handleSubmit(e: JQuery.SubmitEvent) {
     });
 }
 
-function fetchGrades() {
-  assignmentRootElem.empty();
-  const builtAssignments = buildGrades(grades);
-  console.log(builtAssignments);
-  buildAssignmentCards(assignmentRootElem, builtAssignments);
-  // getGrades(courseId, authToken)
-  //   .then((res) => {
-  //     console.log(res);
-  //   })
-  //   .catch((e) => {
-  //     console.error(e);
-  //     showAlert(alertElem, e);
-  //   });
-}
-
-function buildUserEnrolmentObject(enrollments: Enrollment[]): AdaptedEnrollment[] {
-  // console.log('Me Data ', enrollments);
+function buildUserEnrollmentObject(enrollments: Enrollment[]): AdaptedEnrollment[] {
   const userEnrollments = enrollments.map((item) => ({
     id: item.id,
     courseId: item.courseId,
@@ -85,15 +67,15 @@ function buildUserEnrolmentObject(enrollments: Enrollment[]): AdaptedEnrollment[
 }
 
 function buildCohortButtons(enrollments: AdaptedEnrollment[]) {
-  enrollments.forEach(({ id, cohortName }) => {
-    assignmentButtonContainer.append(cohortButton({ id, cohortName }));
+  enrollments.forEach(({ id, cohortName, courseId }) => {
+    assignmentButtonContainer.append(cohortButton({ id, cohortName, courseId }));
   });
 }
 
 function getUserCourses() {
   getMe(authToken)
     .then(({ Enrollments }) => {
-      const userEnrollments = buildUserEnrolmentObject(Enrollments);
+      const userEnrollments = buildUserEnrollmentObject(Enrollments);
       buildCohortButtons(userEnrollments);
     })
     .catch((err) => {
@@ -101,24 +83,41 @@ function getUserCourses() {
     });
 }
 
-function getCourseId(this: JQuery.SubmitEvent) {
-  const id = $(this).data('id');
-  getCohortAssignments(id, authToken).then((res) => {
-    console.log('res: ', res);
+function buildClassTable(mappedAssignments: MappedAssignments, mappedStudents: MappedStudentsWithAssignments) {
+  const table = classTable({ assignments: mappedAssignments, students: mappedStudents });
+  assignmentRootElem.html(table);
+}
+
+function handleCourseClick(this: JQuery.SubmitEvent) {
+  assignmentButtonContainer.find('button').each(function () {
+    $(this).removeClass('active');
   });
-  // console.log(id);
+  $(this).addClass('active');
+  const id = parseInt($(this).data('id'));
+  const courseId = parseInt($(this).data('course-id'));
+  Promise.all([getCohortAssignments(id, authToken), getGrades(courseId, authToken)])
+    .then(([rawCohortAssignments, rawStudentGrades]) => {
+      const mappedAssignments = reduceCohortAssignments(rawCohortAssignments);
+      const mappedStudentGrades = buildStudentAssignmentGrades(rawStudentGrades, mappedAssignments);
+      buildClassTable(mappedAssignments, mappedStudentGrades);
+      console.log(mappedStudentGrades, mappedAssignments);
+    })
+    .catch((e) => {
+      console.error(e);
+    });
 }
 
 function logout() {
   clearStorage();
   checkForToken();
+  assignmentButtonContainer.empty();
+  assignmentRootElem.empty();
 }
 
 function eventListeners() {
   loginForm.on('submit', (e: JQuery.SubmitEvent) => handleSubmit(e));
   inputs.on('focus', () => hideAlert());
-  getGradesBtn.on('click', fetchGrades);
-  assignmentButtonContainer.on('click', 'button', getCourseId);
+  assignmentButtonContainer.on('click', 'button', handleCourseClick);
   logoutButtonElem.on('click', logout);
 }
 

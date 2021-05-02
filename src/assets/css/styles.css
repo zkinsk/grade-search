@@ -18,3 +18,37 @@ td {
 .not-submitted {
   background-color: rgba(255, 0, 0, 0.149);
 }
+
+.grade-table {
+  border: none;
+}
+
+.grade-table-header {
+  background: white;
+  border: none;
+}
+
+.grade-table-header th {
+  border: none;
+  position: sticky;
+  top: 0;
+}
+
+.table-header-rotate {
+  height: 300px;
+  white-space: nowrap;
+  /* border: none; */
+}
+
+.table-header-rotate > div {
+  transform: rotate(300deg);
+  /* transform: translate(1px, 125px); */
+  width: 2.5rem;
+}
+
+.table-header-rotate > div > span {
+  /* border-bottom: 1px solid #ccc; */
+  background: white;
+  padding: 5px 10px;
+  z-index: 100;
+}

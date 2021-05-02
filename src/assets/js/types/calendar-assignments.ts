@@ -22,4 +22,14 @@ interface CohortAssignments extends AnyObj {
   calendarAssignments: CalendarAssignment[];
 }
 
+export interface ReducedAssignments {
+  title: string;
+  required: boolean;
+  assignmentDate: Date;
+  dueDate: Date;
+  id: number;
+}
+
+export type MappedAssignments = Map<string, ReducedAssignments>;
+
 export default CohortAssignments;

@@ -1,3 +1,5 @@
+import { ReducedAssignments } from './calendar-assignments';
+
 interface StudentAssignmentGrade {
   assignmentTitle: string;
   studentName: string;
@@ -12,5 +14,15 @@ export interface SortedAssignment {
   sortOrder: number;
   grades: AdaptedGrades[];
 }
+
+// export type ReducedStudentGrades = Pick<StudentAssignmentGrade, 'studentName'> & {
+//   assignments: Array<Pick<StudentAssignmentGrade, 'assignmentTitle' | 'submitted' | 'grade'>>;
+// };
+
+type StudentNoName = Pick<StudentAssignmentGrade, 'assignmentTitle' | 'submitted' | 'grade'>;
+
+export type StudentGrades = StudentNoName & ReducedAssignments;
+
+export type MappedStudentsWithAssignments = Map<string, Array<StudentNoName & { assignmentDate: Date; dueDate: Date }>>;
 
 export default StudentAssignmentGrade;
