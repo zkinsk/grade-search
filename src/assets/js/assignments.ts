@@ -29,7 +29,6 @@ export const buildStudentAssignmentGrades = (data: StudentAssignmentGrade[], cur
     const { studentName, grade, submitted, ...rest } = item;
     const { assignmentDate, dueDate } = assignment;
     const assignments = studentMap.get(studentName) || [];
-    console.log(grade);
     const mappedGrade = grade ?? ntiOrNotGraded(submitted);
     studentMap.set(studentName, [...assignments, { ...rest, grade: mappedGrade, submitted, assignmentDate, dueDate }]);
   });
@@ -37,7 +36,6 @@ export const buildStudentAssignmentGrades = (data: StudentAssignmentGrade[], cur
   for (let [_key, value] of studentMap) {
     value.sort((a, b) => a.assignmentDate.valueOf() - b.assignmentDate.valueOf());
   }
-  console.log('Student Map: ', studentMap);
   return studentMap;
 };
 
