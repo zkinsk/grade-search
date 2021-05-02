@@ -17,32 +17,38 @@
   <div class="alert alert-info position-fixed w-100 d-none alert-info" role="alert">
     A simple info alert—check it out!
   </div>
-  <div class="jumbotron">
-    <div class="d-flex justify-content-center">
+  <div class="container-fluid">
+    <div class="jumbotron">
+      <div class="d-flex justify-content-center">
 
-      <h1 class="display-4 mr-auto">Student Info</h1>
-      <button class="logout-button btn btn-secondary my-auto d-none">Logout</button>
-      <butt class="login-form-container mr-auto d-none">
-        <form class="d-flex login-form">
-          <div class="form-group mx-2">
-            <label for="exampleInputEmail1">Email address</label>
-            <input name="email" type="email" class="form-control" id="email" aria-describedby="emailHelp">
-            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
-          </div>
-          <div class="form-group mx-2">
-            <label for="exampleInputPassword1">Password</label>
-            <input name="password" type="password" class="form-control" id="password">
-          </div>
-          <button type="submit" class="btn btn-primary align-self-center mb-2">Submit</button>
-        </form>
-        </button>
+        <h1 class="display-4 mr-auto">Student Info</h1>
+        <button class="logout-button btn btn-secondary my-auto d-none">Logout</button>
+        <butt class="login-form-container mr-auto d-none">
+          <form class="d-flex login-form">
+            <div class="form-group mx-2">
+              <label for="exampleInputEmail1">Email address</label>
+              <input name="email" type="email" class="form-control" id="email" aria-describedby="emailHelp">
+              <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+            </div>
+            <div class="form-group mx-2">
+              <label for="exampleInputPassword1">Password</label>
+              <input name="password" type="password" class="form-control" id="password">
+            </div>
+            <button type="submit" class="btn btn-primary align-self-center mb-2">Submit</button>
+          </form>
+          </button>
+      </div>
+    </div>
+    <div class="row mb-4">
+      <div class="assignment-buttons d-flex justify-content-center flex-wrap col-12"></div>
+    </div>
+    <div class="row">
+      <div class="assignment-cards  col-12"></div>
     </div>
   </div>
-  <div class="containter">
-    <div class="assignment-buttons d-flex justify-content-center flex-wrap"></div>
-    <div class="assignment-cards d-flex flex-wrap"></div>
+  <footer>
 
-  </div>
+  </footer>
 
 
   <script src="./assets/js/script.ts"></script>
