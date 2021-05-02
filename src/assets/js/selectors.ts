@@ -1,5 +1,5 @@
-import jquery from 'jquery';
-const $ = (window.$ = window.jQuery = jquery);
+// import jquery from 'jquery';
+// const $ = (window.$ = window.jQuery = jquery);
 
 export const loginForm: JQuery<HTMLFormElement> = $('.login-form');
 export const inputs: JQuery<HTMLInputElement> = $('.login-form input');
