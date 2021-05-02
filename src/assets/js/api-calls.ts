@@ -25,7 +25,6 @@ export const getToken = ({ email, password }: LoginForm) => {
       authToken: 'fake-token',
     },
   };
-  console.log(email, password);
   if (!email || !password) {
     throw new Error('Complete Login form');
   }

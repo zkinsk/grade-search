@@ -100,7 +100,6 @@ function handleCourseClick(this: JQuery.SubmitEvent) {
       const mappedAssignments = reduceCohortAssignments(rawCohortAssignments);
       const mappedStudentGrades = buildStudentAssignmentGrades(rawStudentGrades, mappedAssignments);
       buildClassTable(mappedAssignments, mappedStudentGrades);
-      console.log(mappedStudentGrades, mappedAssignments);
     })
     .catch((e) => {
       console.error(e);
