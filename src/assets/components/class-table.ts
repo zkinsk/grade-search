@@ -3,8 +3,12 @@ import { MappedStudentsWithAssignments } from '../js/types/grades';
 
 const assignmentTitles = (assignments: MappedAssignments) => {
   const headers = [];
-  for (const [key] of assignments) {
-    headers.push(`<th scope="col" class="table-header-rotate"><div><span class="pl-2">${key}</span></div></th>`);
+  for (const [key, { required }] of assignments) {
+    headers.push(
+      `<th scope="col" class="table-header-rotate ${
+        required ? '' : 'not-required'
+      }"><div><span class="pl-2">${key}</span></div></th>`
+    );
   }
   return headers.join('');
 };
@@ -30,18 +34,16 @@ export const classTable = ({
   students: MappedStudentsWithAssignments;
 }) => {
   return /*html*/ `
-  <div class="table-responsive">
-  <table class="table table-striped table-bordered grade-table table-sm">
-  <thead class="grade-table-header thead-light">
-  <tr>
-  <th scope="col">Student</th>
-  ${assignmentTitles(assignments)}
-  </tr>
-  </thead>
-  <tbody class="grade-table-body">
-  ${studentGrades(students)}
-  </tbody>
+  <table class="table table-striped table-bordered table-dark grade-table table-sm">
+    <thead class="grade-table-header thead-dark">
+      <tr>
+        <th scope="col">Student</th>
+        ${assignmentTitles(assignments)}
+      </tr>
+    </thead>
+    <tbody class="grade-table-body">
+      ${studentGrades(students)}
+    </tbody>
   </table>
-  </div>
   `;
 };

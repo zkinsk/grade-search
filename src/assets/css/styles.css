@@ -3,18 +3,6 @@
   margin: 1rem;
 }
 
-/* table,
-th,
-td {
-  border: 1px solid black;
-  border-collapse: collapse;
-}
-th,
-td {
-  padding: 15px;
-  text-align: left;
-} */
-
 .not-submitted {
   background-color: rgba(255, 0, 0, 0.068);
 }
@@ -24,16 +12,10 @@ td {
 }
 
 .not-required {
-  background-color: rgba(255, 255, 0, 0.159);
-}
-
-.grade-table-header {
-  background: white;
-  border: none;
+  background-color: rgb(3, 141, 7) !important;
 }
 
 .grade-table-header th {
-  border: none;
   position: sticky;
   top: -180px;
 }
@@ -44,8 +26,10 @@ td {
 }
 
 .table-header-rotate > div {
+  /* overflow: hidden; */
   transform: rotate(270deg);
-  width: 2.5rem;
+  max-width: 2.5rem;
+  padding-left: 0.5rem;
 }
 
 .grade-table-row td {
