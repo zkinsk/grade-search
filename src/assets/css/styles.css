@@ -31,7 +31,7 @@ td {
 .grade-table-header th {
   border: none;
   position: sticky;
-  top: 0;
+  top: -180px;
 }
 
 .table-header-rotate {

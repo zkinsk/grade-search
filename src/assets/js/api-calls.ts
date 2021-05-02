@@ -14,76 +14,78 @@ type GetMe = (arg1?: string | null) => Promise<Me>;
 type GetCohortAssignments = (arg1?: number, arg2?: string | null) => Promise<CohortAssignments>;
 
 export const getToken = ({ email, password }: LoginForm) => {
-  const mockLogin: LoginRes = {
-    success: true,
-    errorCode: null,
-    resetToken: null,
-    authenticationInfo: {
-      userId: 13786,
-      firstLogin: false,
-      active: true,
-      authToken: 'fake-token',
-    },
-  };
+  // const mockLogin: LoginRes = {
+  //   success: true,
+  //   errorCode: null,
+  //   resetToken: null,
+  //   authenticationInfo: {
+  //     userId: 13786,
+  //     firstLogin: false,
+  //     active: true,
+  //     authToken: 'fake-token',
+  //   },
+  // };
   if (!email || !password) {
     throw new Error('Complete Login form');
   }
-  if (password === 'error') {
-    console.log('error');
-    mockLogin.errorCode = 'Incorrect Credentials';
-    mockLogin.success = false;
-    mockLogin.authenticationInfo = null;
-  }
-  return Promise.resolve(mockLogin);
-  // const url = rootUrl + '/api/instructor/v1/login';
-  // return $.ajax({
-  //   contentType: 'application/json',
-  //   dataType: 'json',
-  //   type: 'POST',
-  //   url: url,
-  //   data: JSON.stringify({
-  //     email,
-  //     password,
-  //   }),
-  // });
+  // if (password === 'error') {
+  //   console.log('error');
+  //   mockLogin.errorCode = 'Incorrect Credentials';
+  //   mockLogin.success = false;
+  //   mockLogin.authenticationInfo = null;
+  // }
+  // return Promise.resolve(mockLogin);
+  const url = rootUrl + '/api/instructor/v1/login';
+  return $.ajax({
+    contentType: 'application/json',
+    dataType: 'json',
+    type: 'POST',
+    url: url,
+    data: JSON.stringify({
+      email,
+      password,
+    }),
+  });
 };
 
 export const getGrades: GetGrades = (courseId, authToken) => {
   if (!courseId || !authToken) {
     throw new Error('missing course id or auth token');
   }
-  return Promise.resolve(grades);
-  // const url = rootUrl + '/api/instructor/v1/grades';
-  // return new Promise((resolve, reject) => {
-  //   resolve(
-  //     $.ajax({
-  //       url: url,
-  //       type: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //         authToken: authToken,
-  //       },
-  //       data: JSON.stringify({ courseId }),
-  //       contentType: 'application/json',
-  //     })
-  //   );
-  // });
+  // return Promise.resolve(grades);
+  const url = rootUrl + '/api/instructor/v1/grades';
+  return new Promise((resolve, reject) => {
+    resolve(
+      $.ajax({
+        url: url,
+        type: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          authToken: authToken,
+        },
+        data: JSON.stringify({ courseId }),
+        contentType: 'application/json',
+      })
+    );
+  });
 };
 
 export const getMe: GetMe = (authToken) => {
   if (!authToken) {
     throw new Error('No Auth Token Provided');
   }
-  return Promise.resolve(me);
-  // const url = rootUrl + '/api/instructor/v1/me';
-  // return $.ajax({
-  //   url: url,
-  //   type: 'GET',
-  //   headers: {
-  //     'Content-Type': 'application/json',
-  //     authToken: authToken,
-  //   },
-  // });
+  // return Promise.resolve(me);
+  const url = rootUrl + '/api/instructor/v1/me';
+  return Promise.resolve(
+    $.ajax({
+      url: url,
+      type: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        authToken: authToken,
+      },
+    })
+  );
 };
 
 export const getCohortAssignments: GetCohortAssignments = (enrollmentId, authToken) => {
@@ -91,15 +93,17 @@ export const getCohortAssignments: GetCohortAssignments = (enrollmentId, authTok
     throw new Error('No Auth Token Provided');
   }
   console.log('enrollment id: ', enrollmentId, ' & ', authToken);
-  return Promise.resolve(assignments);
-  // const url = rootUrl + '/api/instructor/v1/assignments';
-  // return $.ajax({
-  //   url,
-  //   type: 'POST',
-  //   headers: {
-  //     'Content-Type': 'application/json',
-  //     authToken: authToken,
-  //   },
-  //   data: JSON.stringify({ enrollmentId }),
-  // });
+  // return Promise.resolve(assignments);
+  const url = rootUrl + '/api/instructor/v1/assignments';
+  return Promise.resolve(
+    $.ajax({
+      url,
+      type: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        authToken: authToken,
+      },
+      data: JSON.stringify({ enrollmentId }),
+    })
+  );
 };

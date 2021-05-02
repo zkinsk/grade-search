@@ -30,7 +30,6 @@ export const classTable = ({
   students: MappedStudentsWithAssignments;
 }) => {
   return /*html*/ `
-<div class="table-card">
   <table class="table table-striped table-bordered grade-table">
     <thead class="grade-table-header thead-light">
       <tr>
@@ -42,6 +41,5 @@ export const classTable = ({
       ${studentGrades(students)}
     </tbody>
   </table>
-</div>
   `;
 };
