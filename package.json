@@ -5,11 +5,11 @@
   "main": "./src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "parcel ./src/index.html",
+    "dev": "parcel ./src/index.html --open",
     "prebuild": "rm -rf dist",
     "build": "parcel build ./src/index.html --public-url ./",
     "predeploy": "npm run build",
-    "deploy": "git subtree push --prefix dist origin gh-pages"
+    "deploy": "gh-pages -d dist"
   },
   "repository": {
     "type": "git",
@@ -27,6 +27,7 @@
   },
   "devDependencies": {
     "@types/jquery": "^3.5.5",
+    "gh-pages": "^3.1.0",
     "typescript": "^4.2.4"
   }
 }
