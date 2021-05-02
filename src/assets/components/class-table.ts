@@ -31,14 +31,14 @@ export const classTable = ({
 }) => {
   return /*html*/ `
 <div class="table-card">
-<table class="w-100">
-  <thead class="grade-table">
+<table class="w-100 table grade-table">
+  <thead class="grade-table-header">
       <tr>
         <th>Student</th>
         ${assignmentTitles(assignments)}
       </tr>
     </thead>
-    <tbody>
+    <tbody class="grade-table-body">
       ${studentGrades(students)}
     </tbody>
     </table>
