@@ -17,6 +17,7 @@ import {
   assignmentRootElem,
   assignmentButtonContainer,
   logoutButtonElem,
+  logInButton,
 } from './selectors';
 
 import { Enrollment, AdaptedEnrollment } from './types/me-types';
@@ -36,6 +37,7 @@ function handleLogin(res: LoginResponse) {
 
 function handleSubmit(e: JQuery.SubmitEvent) {
   e.preventDefault();
+  logInButton.prop('disabled', true);
   const { formData, clearableInputs } = getFormData(e.target);
   getToken(formData)
     .then((res) => {
@@ -43,11 +45,14 @@ function handleSubmit(e: JQuery.SubmitEvent) {
       if (res.success) {
         clearableInputs.forEach((input) => (input.value = ''));
         handleLogin(res);
+        logInButton.prop('disabled', false);
         return;
       }
+      logInButton.prop('disabled', false);
       alertDanger('Incorrect Credentials', null);
     })
     .catch((e: Error) => {
+      logInButton.prop('disabled', false);
       console.error(e);
       alertDanger(e.message, null);
     });
@@ -67,6 +72,7 @@ function buildUserEnrollmentObject(enrollments: Enrollment[]): AdaptedEnrollment
 }
 
 function buildCohortButtons(enrollments: AdaptedEnrollment[]) {
+  assignmentButtonContainer.empty();
   enrollments.forEach(({ id, cohortName, courseId }) => {
     assignmentButtonContainer.append(cohortButton({ id, cohortName, courseId }));
   });

@@ -10,5 +10,6 @@ export const assignmentButtonContainer: JQuery<HTMLDivElement> = $('.assignment-
 export const logoutButtonElem: JQuery<HTMLButtonElement> = $('.logout-button');
 export const alertDangerElem: JQuery<HTMLDivElement> = $('.alert-danger');
 export const alertInfoElem: JQuery<HTMLDivElement> = $('.alert-info');
+export const logInButton: JQuery<HTMLButtonElement> = $('#log-in-button');
 
 export default $;

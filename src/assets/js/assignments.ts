@@ -29,7 +29,10 @@ export const buildStudentAssignmentGrades = (data: StudentAssignmentGrade[], cur
     const { studentName, grade, submitted, ...rest } = item;
     const { assignmentDate, dueDate } = assignment;
     const assignments = studentMap.get(studentName) || [];
-    const mappedGrade = grade ?? ntiOrNotGraded(submitted);
+    let mappedGrade = grade ?? ntiOrNotGraded(submitted);
+    if (mappedGrade.toLowerCase() === 'incomplete') {
+      mappedGrade = 'I';
+    }
     studentMap.set(studentName, [...assignments, { ...rest, grade: mappedGrade, submitted, assignmentDate, dueDate }]);
   });
 
