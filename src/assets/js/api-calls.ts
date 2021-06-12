@@ -26,7 +26,7 @@ export const getToken = ({ email, password }: LoginForm) => {
   //   },
   // };
   if (!email || !password) {
-    throw new Error('Complete Login form');
+    return Promise.reject(Error('Complete Login form'));
   }
   // if (password === 'error') {
   //   console.log('error');
