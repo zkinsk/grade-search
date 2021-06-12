@@ -41,7 +41,6 @@ function handleSubmit(e: JQuery.SubmitEvent) {
   const { formData, clearableInputs } = getFormData(e.target);
   getToken(formData)
     .then((res) => {
-      console.log(res);
       if (res.success) {
         clearableInputs.forEach((input) => (input.value = ''));
         handleLogin(res);
