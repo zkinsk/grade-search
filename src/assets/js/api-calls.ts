@@ -36,16 +36,18 @@ export const getToken = ({ email, password }: LoginForm) => {
   // }
   // return Promise.resolve(mockLogin);
   const url = rootUrl + '/api/instructor/v1/login';
-  return $.ajax({
-    contentType: 'application/json',
-    dataType: 'json',
-    type: 'POST',
-    url: url,
-    data: JSON.stringify({
-      email,
-      password,
-    }),
-  });
+  return Promise.resolve(
+    $.ajax({
+      contentType: 'application/json',
+      dataType: 'json',
+      type: 'POST',
+      url: url,
+      data: JSON.stringify({
+        email,
+        password,
+      }),
+    })
+  );
 };
 
 export const getGrades: GetGrades = (courseId, authToken) => {
