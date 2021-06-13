@@ -93,7 +93,7 @@ export const getCohortAssignments: GetCohortAssignments = (enrollmentId, authTok
 
 export const getAttendance: GetAttendance = (courseId, authToken) => {
   if (!authToken) {
-    throw new Error('No Auth Token Provided');
+    Promise.reject(Error('No Auth Token Provided'));
   }
   const url = rootUrl + '/api/instructor/v1/attendance';
   return Promise.resolve(

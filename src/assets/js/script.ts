@@ -24,8 +24,11 @@ import { Enrollment, AdaptedEnrollment } from './types/me-types';
 import { MappedAssignments } from './types/calendar-assignments';
 import { MappedStudentsWithAssignments } from './types/grades';
 import LoginResponse from './types/login-types';
+import useGetAttendance from './attendance/attendance';
 
 const authObj: { token: null | string } = { token: null };
+
+useGetAttendance(authObj);
 
 function handleLogin(res: LoginResponse) {
   alertInfo('Logged In!', 2000);
@@ -78,7 +81,7 @@ function buildCohortButtons(enrollments: AdaptedEnrollment[]) {
 }
 
 function getUserCourses() {
-  getMe(authToken)
+  console.log('Autho token, ', authObj.token);
   getMe(authObj.token)
     .then(({ Enrollments }) => {
       const userEnrollments = buildUserEnrollmentObject(Enrollments);
