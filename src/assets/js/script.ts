@@ -28,7 +28,7 @@ import useGetAttendance from './attendance/attendance';
 
 const authObj: { token: null | string } = { token: null };
 
-useGetAttendance(authObj);
+const { getStudentAttendance, mapStudentAttendance } = useGetAttendance(authObj);
 
 function handleLogin(res: LoginResponse) {
   alertInfo('Logged In!', 2000);
@@ -81,7 +81,6 @@ function buildCohortButtons(enrollments: AdaptedEnrollment[]) {
 }
 
 function getUserCourses() {
-  console.log('Autho token, ', authObj.token);
   getMe(authObj.token)
     .then(({ Enrollments }) => {
       const userEnrollments = buildUserEnrollmentObject(Enrollments);
@@ -104,11 +103,16 @@ function handleCourseClick(this: JQuery.SubmitEvent) {
   $(this).addClass('active');
   const id = parseInt($(this).data('id'));
   const courseId = parseInt($(this).data('course-id'));
-  Promise.all([getCohortAssignments(id, authObj.token), getGrades(courseId, authObj.token)])
-    .then(([rawCohortAssignments, rawStudentGrades]) => {
+  Promise.all([
+    getCohortAssignments(id, authObj.token),
+    getGrades(courseId, authObj.token),
+    getStudentAttendance(courseId),
+  ])
+    .then(([rawCohortAssignments, rawStudentGrades, rawStudentAttendance]) => {
       const mappedAssignments = reduceCohortAssignments(rawCohortAssignments);
       const mappedStudentGrades = buildStudentAssignmentGrades(rawStudentGrades, mappedAssignments);
-      buildClassTable(mappedAssignments, mappedStudentGrades);
+      const mappedStudentGradesAndAttendance = mapStudentAttendance(rawStudentAttendance, mappedStudentGrades);
+      buildClassTable(mappedAssignments, mappedStudentGradesAndAttendance);
     })
     .catch((e) => {
       console.error(e);
