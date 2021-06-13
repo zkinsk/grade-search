@@ -24,8 +24,11 @@ import { Enrollment, AdaptedEnrollment } from './types/me-types';
 import { MappedAssignments } from './types/calendar-assignments';
 import { MappedStudentsWithAssignments } from './types/grades';
 import LoginResponse from './types/login-types';
+import useGetAttendance from './attendance/attendance';
 
-let authToken: string | null;
+const authObj: { token: null | string } = { token: null };
+
+const { getStudentAttendance, mapStudentAttendance } = useGetAttendance(authObj);
 
 function handleLogin(res: LoginResponse) {
   alertInfo('Logged In!', 2000);
@@ -41,7 +44,6 @@ function handleSubmit(e: JQuery.SubmitEvent) {
   const { formData, clearableInputs } = getFormData(e.target);
   getToken(formData)
     .then((res) => {
-      console.log(res);
       if (res.success) {
         clearableInputs.forEach((input) => (input.value = ''));
         handleLogin(res);
@@ -79,7 +81,7 @@ function buildCohortButtons(enrollments: AdaptedEnrollment[]) {
 }
 
 function getUserCourses() {
-  getMe(authToken)
+  getMe(authObj.token)
     .then(({ Enrollments }) => {
       const userEnrollments = buildUserEnrollmentObject(Enrollments);
       buildCohortButtons(userEnrollments);
@@ -101,11 +103,16 @@ function handleCourseClick(this: JQuery.SubmitEvent) {
   $(this).addClass('active');
   const id = parseInt($(this).data('id'));
   const courseId = parseInt($(this).data('course-id'));
-  Promise.all([getCohortAssignments(id, authToken), getGrades(courseId, authToken)])
-    .then(([rawCohortAssignments, rawStudentGrades]) => {
+  Promise.all([
+    getCohortAssignments(id, authObj.token),
+    getGrades(courseId, authObj.token),
+    getStudentAttendance(courseId),
+  ])
+    .then(([rawCohortAssignments, rawStudentGrades, rawStudentAttendance]) => {
       const mappedAssignments = reduceCohortAssignments(rawCohortAssignments);
       const mappedStudentGrades = buildStudentAssignmentGrades(rawStudentGrades, mappedAssignments);
-      buildClassTable(mappedAssignments, mappedStudentGrades);
+      const mappedStudentGradesAndAttendance = mapStudentAttendance(rawStudentAttendance, mappedStudentGrades);
+      buildClassTable(mappedAssignments, mappedStudentGradesAndAttendance);
     })
     .catch((e) => {
       console.error(e);
@@ -135,7 +142,7 @@ function checkForToken() {
     return;
   }
   showLogoutButton();
-  authToken = token;
+  authObj.token = token;
   getUserCourses();
 }
 

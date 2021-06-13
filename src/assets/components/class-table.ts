@@ -18,8 +18,10 @@ const studentGrades = (students: MappedStudentsWithAssignments) => {
   for (const [name, value] of students) {
     studentRow.push(`
     <tr class="grade-table-row">
-    <td>${name}</td>
-    ${value.map(({ grade }) => `<td ${grade === 'NTI' ? 'class="NTI"' : ''}>${grade}</td>`).join('')}
+    <td data-student-name="${name.toLowerCase()}">${name}<div>A:${value.attendance.absent} / U:${
+      value.attendance.unexcused
+    } / T:${value.attendance.sessions}</div></td>
+    ${value.grades.map(({ grade }) => `<td ${grade === 'NTI' ? 'class="NTI"' : ''}>${grade}</td>`).join('')}
     </tr>
     `);
   }
