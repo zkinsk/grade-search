@@ -18,7 +18,7 @@ const studentGrades = (students: MappedStudentsWithAssignments) => {
   for (const [name, value] of students) {
     studentRow.push(`
     <tr class="grade-table-row">
-    <td>${name}</td>
+    <td data-student-name="${name.toLowerCase()}">${name}</td>
     ${value.map(({ grade }) => `<td ${grade === 'NTI' ? 'class="NTI"' : ''}>${grade}</td>`).join('')}
     </tr>
     `);
