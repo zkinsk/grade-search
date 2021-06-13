@@ -26,16 +26,27 @@ export const buildStudentAssignmentGrades = (data: StudentAssignmentGrade[], cur
     if (!assignment) return;
     const { studentName, grade, submitted, ...rest } = item;
     const { assignmentDate, dueDate } = assignment;
-    const assignments = studentMap.get(studentName) || [];
+    const assignments = studentMap.get(studentName) || {
+      grades: [],
+      attendance: {
+        sessions: 0,
+        absent: 0,
+        unexcused: 0,
+        excused: 0,
+      },
+    };
     let mappedGrade = grade ?? ntiOrNotGraded(submitted);
     if (mappedGrade.toLowerCase() === 'incomplete') {
       mappedGrade = 'I';
     }
-    studentMap.set(studentName, [...assignments, { ...rest, grade: mappedGrade, submitted, assignmentDate, dueDate }]);
+    studentMap.set(studentName, {
+      attendance: { ...assignments.attendance },
+      grades: [...assignments.grades, { ...rest, grade: mappedGrade, submitted, assignmentDate, dueDate }],
+    });
   });
 
   for (let [_key, value] of studentMap) {
-    value.sort((a, b) => a.assignmentDate.valueOf() - b.assignmentDate.valueOf());
+    value.grades.sort((a, b) => a.assignmentDate.valueOf() - b.assignmentDate.valueOf());
   }
   return studentMap;
 };
