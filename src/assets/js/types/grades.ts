@@ -23,6 +23,17 @@ type StudentNoName = Pick<StudentAssignmentGrade, 'assignmentTitle' | 'submitted
 
 export type StudentGrades = StudentNoName & ReducedAssignments;
 
-export type MappedStudentsWithAssignments = Map<string, Array<StudentNoName & { assignmentDate: Date; dueDate: Date }>>;
+export type MappedStudentsWithAssignments = Map<
+  string,
+  {
+    grades: Array<StudentNoName & { assignmentDate: Date; dueDate: Date }>;
+    attendance: {
+      sessions: number;
+      absent: number;
+      unexcused: number;
+      excused: number;
+    };
+  }
+>;
 
 export default StudentAssignmentGrade;
