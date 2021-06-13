@@ -25,7 +25,7 @@ import { MappedAssignments } from './types/calendar-assignments';
 import { MappedStudentsWithAssignments } from './types/grades';
 import LoginResponse from './types/login-types';
 
-let authToken: string | null;
+const authObj: { token: null | string } = { token: null };
 
 function handleLogin(res: LoginResponse) {
   alertInfo('Logged In!', 2000);
@@ -79,6 +79,7 @@ function buildCohortButtons(enrollments: AdaptedEnrollment[]) {
 
 function getUserCourses() {
   getMe(authToken)
+  getMe(authObj.token)
     .then(({ Enrollments }) => {
       const userEnrollments = buildUserEnrollmentObject(Enrollments);
       buildCohortButtons(userEnrollments);
@@ -100,7 +101,7 @@ function handleCourseClick(this: JQuery.SubmitEvent) {
   $(this).addClass('active');
   const id = parseInt($(this).data('id'));
   const courseId = parseInt($(this).data('course-id'));
-  Promise.all([getCohortAssignments(id, authToken), getGrades(courseId, authToken)])
+  Promise.all([getCohortAssignments(id, authObj.token), getGrades(courseId, authObj.token)])
     .then(([rawCohortAssignments, rawStudentGrades]) => {
       const mappedAssignments = reduceCohortAssignments(rawCohortAssignments);
       const mappedStudentGrades = buildStudentAssignmentGrades(rawStudentGrades, mappedAssignments);
@@ -134,7 +135,7 @@ function checkForToken() {
     return;
   }
   showLogoutButton();
-  authToken = token;
+  authObj.token = token;
   getUserCourses();
 }
 
