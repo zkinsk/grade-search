@@ -23,9 +23,13 @@
   "homepage": "https://github.com/zkinsk/grade-search#readme",
   "description": "",
   "dependencies": {
-    "parcel-bundler": "^1.12.5"
+    "bootstrap": "^4.6.0",
+    "jquery": "^3.6.0",
+    "parcel-bundler": "^1.12.5",
+    "popper.js": "^1.16.1"
   },
   "devDependencies": {
+    "@fortawesome/fontawesome-free": "^5.15.3",
     "@types/jquery": "^3.5.5",
     "gh-pages": "^3.1.0",
     "typescript": "^4.3.2"
